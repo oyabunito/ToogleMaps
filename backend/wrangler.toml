@@ -2,6 +2,13 @@ name = "tooglemap"
 main = "src/index.js"
 compatibility_date = "2024-09-23"
 
+# Sans ça, chaque déploiement (déclenché par un simple push Git) EFFACE
+# les variables/secrets ajoutés depuis le dashboard Cloudflare qui ne sont
+# pas déclarés ici (ex. ORS_API_KEY) — comportement par défaut de
+# `wrangler deploy`, documenté ici :
+# https://developers.cloudflare.com/workers/wrangler/configuration/
+keep_vars = true
+
 # Domaine autorisé à appeler ce Worker (celui du frontend déployé),
 # pour éviter que d'autres sites consomment le quota ORS.
 [vars]
