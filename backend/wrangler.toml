@@ -2,11 +2,10 @@ name = "tooglemaps-api"
 main = "src/index.js"
 compatibility_date = "2024-09-23"
 
-# Domaine autorisé à appeler ce Worker (celui de ton frontend Cloudflare
-# Pages une fois déployé). "*" pendant le développement, à restreindre
-# ensuite pour éviter que d'autres sites consomment ton quota ORS.
+# Domaine autorisé à appeler ce Worker (celui du frontend déployé),
+# pour éviter que d'autres sites consomment le quota ORS.
 [vars]
-ALLOWED_ORIGIN = "*"
+ALLOWED_ORIGIN = "https://tooglesmaps.0xcryptoyabun.workers.dev"
 
 # La clé API OpenRouteService NE VA PAS ici (fichier versionné dans git).
 # Une fois le compte ORS créé (https://openrouteservice.org/dev/#/signup),
