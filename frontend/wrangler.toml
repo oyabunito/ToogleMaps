@@ -1,0 +1,7 @@
+name = "tooglemaps"
+compatibility_date = "2024-09-23"
+
+# Hébergement du frontend statique (site PWA) sur Cloudflare Workers,
+# qui a remplacé Cloudflare Pages pour les nouveaux projets en 2026.
+[assets]
+directory = "."
