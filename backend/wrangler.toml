@@ -1,4 +1,4 @@
-name = "tooglemaps-api"
+name = "tooglemap"
 main = "src/index.js"
 compatibility_date = "2024-09-23"
 
