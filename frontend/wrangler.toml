@@ -1,4 +1,4 @@
-name = "tooglemaps"
+name = "tooglesmaps"
 compatibility_date = "2024-09-23"
 
 # Hébergement du frontend statique (site PWA) sur Cloudflare Workers,
