@@ -16,6 +16,11 @@
 // batcher les appels ou augmenter de plan.
 
 const ORS_BASE = "https://api.openrouteservice.org";
+// Base Adresse Nationale (BAN) : source officielle française, gratuite,
+// sans clé, et bien plus fiable qu'ORS/OSM pour les petites communes et
+// hameaux ruraux. Essayée en premier ; ORS sert de repli (adresses non
+// françaises, ou non trouvées côté BAN).
+const BAN_BASE = "https://api-adresse.data.gouv.fr";
 const MAX_ADDRESSES = 100;
 
 function corsHeaders(env) {
@@ -33,10 +38,25 @@ function json(data, status, env) {
   });
 }
 
+async function geocodeBan(text, limit) {
+  const url = `${BAN_BASE}/search/?q=${encodeURIComponent(text)}&limit=${limit}`;
+  const res = await fetch(url);
+  if (!res.ok) return [];
+  const data = await res.json();
+  return (data.features || []).map((f) => ({
+    label: f.properties.label,
+    lat: f.geometry.coordinates[1],
+    lon: f.geometry.coordinates[0],
+  }));
+}
+
 // boundary.country=FRA : sans ça, ORS classe parfois des résultats
 // ambigus (grandes villes homonymes à l'étranger) avant la petite commune
 // française recherchée. À retirer si des tournées hors France sont prévues.
 async function geocodeAutocomplete(text, env) {
+  const banResults = await geocodeBan(text, 8);
+  if (banResults.length) return banResults;
+
   const url = `${ORS_BASE}/geocode/autocomplete?api_key=${encodeURIComponent(env.ORS_API_KEY)}&text=${encodeURIComponent(text)}&size=8&boundary.country=FRA`;
   const res = await fetch(url);
   if (!res.ok) return [];
@@ -49,6 +69,9 @@ async function geocodeAutocomplete(text, env) {
 }
 
 async function geocodeSearch(text, env) {
+  const banResults = await geocodeBan(text, 1);
+  if (banResults.length) return banResults[0];
+
   const url = `${ORS_BASE}/geocode/search?api_key=${encodeURIComponent(env.ORS_API_KEY)}&text=${encodeURIComponent(text)}&size=1&boundary.country=FRA`;
   const res = await fetch(url);
   if (!res.ok) return null;
