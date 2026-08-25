@@ -33,8 +33,11 @@ function json(data, status, env) {
   });
 }
 
+// boundary.country=FRA : sans ça, ORS classe parfois des résultats
+// ambigus (grandes villes homonymes à l'étranger) avant la petite commune
+// française recherchée. À retirer si des tournées hors France sont prévues.
 async function geocodeAutocomplete(text, env) {
-  const url = `${ORS_BASE}/geocode/autocomplete?api_key=${encodeURIComponent(env.ORS_API_KEY)}&text=${encodeURIComponent(text)}&size=5`;
+  const url = `${ORS_BASE}/geocode/autocomplete?api_key=${encodeURIComponent(env.ORS_API_KEY)}&text=${encodeURIComponent(text)}&size=8&boundary.country=FRA`;
   const res = await fetch(url);
   if (!res.ok) return [];
   const data = await res.json();
@@ -46,7 +49,7 @@ async function geocodeAutocomplete(text, env) {
 }
 
 async function geocodeSearch(text, env) {
-  const url = `${ORS_BASE}/geocode/search?api_key=${encodeURIComponent(env.ORS_API_KEY)}&text=${encodeURIComponent(text)}&size=1`;
+  const url = `${ORS_BASE}/geocode/search?api_key=${encodeURIComponent(env.ORS_API_KEY)}&text=${encodeURIComponent(text)}&size=1&boundary.country=FRA`;
   const res = await fetch(url);
   if (!res.ok) return null;
   const data = await res.json();
