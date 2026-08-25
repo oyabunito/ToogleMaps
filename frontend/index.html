@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>ToogleMaps</title>
+  <meta name="description" content="Tournée de livraison optimisée" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" href="icons/icon.svg" />
+  <link rel="apple-touch-icon" href="icons/icon.svg" />
+  <meta name="theme-color" content="#0f172a" />
+  <link rel="stylesheet" href="css/style.css?v=1" />
+</head>
+<body>
+  <header>
+    <h1>ToogleMaps</h1>
+    <nav class="tabs">
+      <button id="tab-add" class="active" type="button">Adresses</button>
+      <button id="tab-route" type="button">Tournée</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Vue: ajout d'adresses -->
+    <section id="view-add" class="view active">
+      <div class="card">
+        <span class="field-label">Ajouter un arrêt</span>
+        <div class="input-row">
+          <input type="text" id="address-input" placeholder="Adresse (ex. 12 rue de la Paix, Paris)" autocomplete="off" />
+          <button class="icon-btn" id="mic-btn" type="button" title="Dicter l'adresse">🎤</button>
+          <button class="icon-btn" id="scan-btn" type="button" title="Scanner une étiquette">📷</button>
+          <div class="suggestions" id="suggestions" hidden></div>
+        </div>
+        <input type="file" id="scan-input" accept="image/*" capture="environment" hidden />
+        <p id="ocr-status" class="field-label" hidden></p>
+        <div style="margin-top: 10px; display:flex; gap:8px;">
+          <button class="btn block" id="add-btn" type="button">Ajouter à la tournée</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="field-label">Point de départ</span>
+        <div class="input-row">
+          <input type="text" id="start-input" placeholder="Laisser vide = ma position actuelle" autocomplete="off" />
+        </div>
+      </div>
+
+      <div class="card">
+        <span class="field-label">Arrêts à optimiser (<span id="draft-count">0</span>)</span>
+        <ul class="draft-list" id="draft-list"></ul>
+        <p class="empty" id="draft-empty">Aucune adresse ajoutée pour l'instant.</p>
+        <button class="btn block" id="optimize-btn" type="button" style="margin-top:12px;">Optimiser la tournée</button>
+      </div>
+    </section>
+
+    <!-- Vue: tournée optimisée -->
+    <section id="view-route" class="view">
+      <div id="map"></div>
+
+      <div class="card needs-attention" id="failed-card" hidden>
+        <h3>Adresses non reconnues</h3>
+        <ul class="draft-list" id="failed-list"></ul>
+      </div>
+
+      <div class="card">
+        <span class="field-label">Arrêts dans l'ordre optimisé</span>
+        <ul class="stop-list" id="stop-list"></ul>
+        <p class="empty" id="route-empty">Aucune tournée calculée pour l'instant.</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/config.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/speech.js"></script>
+  <script src="js/ocr.js"></script>
+  <script src="js/addAddress.js"></script>
+  <script src="js/stopList.js"></script>
+  <script src="js/map.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
